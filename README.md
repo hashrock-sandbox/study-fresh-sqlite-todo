@@ -1,5 +1,8 @@
 # fresh project
 
+![image](https://user-images.githubusercontent.com/3132889/167111605-fb1841c5-9349-453e-a042-846bbfa54f20.png)
+
+
 ### Usage
 
 Start the project:
