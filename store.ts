@@ -27,8 +27,3 @@ export class Database {
     return this.orm.findMany(User, {});
   }
 }
-
-// const a = new User()
-// a.userName = "Taro"
-// a.age = 14
-// orm.save(a)

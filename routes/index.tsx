@@ -1,11 +1,11 @@
 /** @jsx h */
 import { h, PageProps } from "../client_deps.ts";
-import { Database } from "../store.ts";
+import { Database, User } from "../store.ts";
 import { Handlers } from "../server_deps.ts";
 
 const db = new Database();
 
-export default function Home({ data }: PageProps<User[] | null>) {
+export default function Home({ data }: PageProps<PageData | null>) {
   if (!data) {
     return <h1>Error</h1>;
   }
@@ -13,33 +13,35 @@ export default function Home({ data }: PageProps<User[] | null>) {
   return (
     <div>
       <form method="POST">
-        <input type="text" name="text" />
-        <button type="submit" style="margin-left: 4px">Add</button>
+        <input type="text" name="username" />
+        <button type="submit">Add</button>
       </form>
 
-      {data.length > 0
-        ? data.map((i) => <div>{i.userName}</div>)
+      {data.users.length > 0
+        ? data.users.map((i) => <div>{i.userName}</div>)
         : <div>Not Found</div>}
     </div>
   );
 }
 
-interface User {
-  userName: string;
+interface PageData {
+  users: User[];
 }
 
-export const handler: Handlers<User[]> = {
+export const handler: Handlers<PageData> = {
   async POST(req, ctx): Promise<Response> {
     const form = await req.formData();
-    const text = form.get("text");
+    const text = form.get("username");
     if (typeof text !== "string") {
       return new Response("misformed form", { status: 400 });
     }
     db.addUser(text);
     return Response.redirect(req.url, 303);
   },
-  async GET(_, ctx) {
-    const u: User[] = await db.fetch();
-    return ctx.render(u);
+  GET(_, ctx) {
+    const p = {
+      users: db.fetch(),
+    };
+    return ctx.render(p);
   },
 };
