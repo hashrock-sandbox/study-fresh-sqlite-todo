@@ -13,12 +13,12 @@ export default function Home({ data }: PageProps<PageData | null>) {
   return (
     <div>
       <form method="POST">
-        <input type="text" name="username" />
+        <input type="text" name="username" autoFocus={true} />
         <button type="submit">Add</button>
       </form>
 
       {data.users.length > 0
-        ? data.users.map((i) => <div>{i.userName}</div>)
+        ? data.users.slice().reverse().map((i) => <div>{i.userName}</div>)
         : <div>Not Found</div>}
     </div>
   );
